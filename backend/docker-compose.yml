@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: finance
+      POSTGRES_PASSWORD: finance
+      POSTGRES_DB: finance_tracker
+    ports:
+      - "5432:5432"
+    volumes:
+      - finance_tracker_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U finance -d finance_tracker"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql+psycopg2://finance:finance@db:5432/finance_tracker"
+      JWT_SECRET_KEY: "${JWT_SECRET_KEY:-7b07418691c98f435f39d6478abc71ecb0e059fe68da0a3075f284f4b810f06a}"
+      JWT_ALGORITHM: "HS256"
+      JWT_EXPIRES_MINUTES: "10080"
+      CORS_ORIGINS: "http://localhost:5173,http://127.0.0.1:5173"
+      FINNHUB_API_KEY: "${FINNHUB_API_KEY:-d9jge41r01qq0r8m9kvgd9jge41r01qq0r8m9l00}"
+    ports:
+      - "8000:8000"
+
+volumes:
+  finance_tracker_pgdata:

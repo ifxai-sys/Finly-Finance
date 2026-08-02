@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #F4F1E6;
+  --color-cream-deep: #EDE9D8;
+  --color-ink: #23291F;
+  --color-forest: #1E3A2B;
+  --color-forest-deep: #16281D;
+  --color-moss: #3F6B4B;
+  --color-sage: #E7ECDD;
+  --color-coral: #D9564C;
+  --color-coral-tint: #FBE7E4;
+  --color-amber: #E3971F;
+  --color-amber-tint: #FBEFDA;
+  --color-paper: #FFFFFF;
+  --color-mist: #8A9084;
+
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-body: "Inter", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+::selection {
+  background-color: var(--color-amber);
+  color: var(--color-forest-deep);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
