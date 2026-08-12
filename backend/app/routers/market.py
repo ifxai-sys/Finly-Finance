@@ -33,7 +33,10 @@ class Settings(BaseSettings):
     coingecko_api_key: str = "CG-H4NCyhYfYcxuLd38sfzq5LkE"
     # --- Gmail API (OAuth2) — used to send OTP emails for signup & password reset ---
     # See backend/README.md "Gmail OTP setup" for how to get these values.
-   
+    gmail_client_id: str = ""
+    gmail_client_secret: str = ""
+    gmail_refresh_token: str = ""
+    gmail_sender_email: str = ""
 
     # --- OTP settings ---
     otp_expire_minutes: int = 10
