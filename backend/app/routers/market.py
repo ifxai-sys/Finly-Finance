@@ -49,12 +49,12 @@ async def _proxy_get(url: str) -> JSONResponse:
 
 
 # ---------- Crypto (CoinGecko) ----------
-
 @router.get("/api/crypto/coins/markets")
 async def crypto_markets(request: Request):
     query = request.url.query
     url = f"{settings.coingecko_base_url}/coins/markets?{query}"
-    return await _proxy_get(url)
+    headers = {"x-cg-demo-api-key": settings.coingecko_api_key} if settings.coingecko_api_key else None
+    return await _proxy_get(url, cache_ttl=180, headers=headers)
 
 
 # ---------- Currency: latest rates (ExchangeRate-API open access) ----------
