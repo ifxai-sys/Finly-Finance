@@ -4,6 +4,16 @@ function toISODate(date) {
   return date.toISOString().slice(0, 10);
 }
 
+// Frankfurter (ECB) only covers these ~31 currencies. Checking this before
+// calling it avoids firing a request we already know will 404 — e.g. for
+// PKR or SAR, which ExchangeRate-API supports but Frankfurter doesn't.
+const FRANKFURTER_CURRENCIES = new Set([
+  "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "EUR", "GBP",
+  "HKD", "HUF", "IDR", "ILS", "INR", "ISK", "JPY", "KRW", "MXN", "MYR",
+  "NOK", "NZD", "PHP", "PLN", "RON", "SEK", "SGD", "THB", "TRY", "USD",
+  "ZAR",
+]);
+
 /**
  * Fetches live exchange rates for one base currency against a list of target
  * currencies, via ExchangeRate-API's free "open access" endpoint (no key
@@ -57,6 +67,10 @@ export async function getRateHistory(base, symbol, days = 7) {
       date: toISODate(new Date(Date.now() - (days - i) * 86_400_000)),
       rate: 1,
     }));
+  }
+
+  if (!FRANKFURTER_CURRENCIES.has(base) || !FRANKFURTER_CURRENCIES.has(symbol)) {
+    throw new Error(`Rate history unavailable for "${base}/${symbol}" (unsupported by Frankfurter).`);
   }
 
   const end = new Date();
